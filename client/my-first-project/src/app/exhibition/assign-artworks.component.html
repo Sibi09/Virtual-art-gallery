@@ -1,0 +1,11 @@
+<mat-card *ngFor="let artwork of artworks">
+    <mat-checkbox
+      (change)="toggleSelection(artwork._id!, $event.checked)">
+      {{ artwork.title }} ({{ artwork.price }} Ft)
+    </mat-checkbox>
+  </mat-card>
+  
+  <div style="margin-top: 1rem;">
+    <button mat-raised-button color="primary" (click)="save()">Hozzárendelés</button>
+  </div>
+  

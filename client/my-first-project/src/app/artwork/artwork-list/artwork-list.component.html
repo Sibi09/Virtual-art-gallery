@@ -1,0 +1,26 @@
+<div class="artwork-container">
+  <mat-card *ngFor="let artwork of artworks" class="artwork-card">
+    <mat-card-header>
+      <mat-card-title>{{ artwork.title }}</mat-card-title>
+      <mat-card-subtitle>Művész: {{ artwork.artist.username }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <img mat-card-image [src]="'http://localhost:5000' + artwork.imageUrl" alt="{{ artwork.title }}" />
+
+    <mat-card-content>
+      <p>{{ artwork.description }}</p>
+      <p>Ár: {{ artwork.price }} Ft</p>
+    </mat-card-content>
+
+    <mat-card-actions *ngIf="canDelete(artwork)">
+      <button
+        mat-raised-button
+        color="warn"
+        *ngIf="artwork._id"
+        (click)="deleteArtwork(artwork._id)">
+        Törlés
+      </button>
+      <button class="edit" mat-raised-button color="warn" (click)="editArtwork(artwork._id)">Szerkesztés</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

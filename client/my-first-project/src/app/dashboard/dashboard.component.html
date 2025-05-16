@@ -1,0 +1,10 @@
+<div class="dashboard-container" *ngIf="user">
+    <mat-card>
+      <mat-card-title>Üdv, {{ user.username }}!</mat-card-title>
+      <mat-card-content>
+        <p>Szerepkör: {{ user.role }}</p>
+        <p>Üdvözlünk a Virtuális Művészeti Galériádban.</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  

@@ -1,0 +1,12 @@
+.dashboard-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    background-color: #fafafa;
+  }
+  
+  mat-card {
+    width: 100%;
+    max-width: 600px;
+    padding: 1.5rem;
+  }

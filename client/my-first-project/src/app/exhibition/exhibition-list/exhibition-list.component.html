@@ -1,0 +1,38 @@
+<h2>Kiállítások</h2>
+
+<div class="exhibition-list">
+  <mat-card *ngFor="let exhibition of exhibitions" class="exhibition-card">
+    <mat-card-header>
+      <mat-card-title>{{ exhibition.title }}</mat-card-title>
+      <mat-card-subtitle>Dátum: {{ exhibition.date | date }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>{{ exhibition.description }}</p>
+    </mat-card-content>
+
+    <mat-card-content>
+        <p>{{ exhibition.description }}</p>
+      
+        <div *ngIf="exhibition.artworks?.length">
+            <h4>Hozzárendelt művek:</h4>
+            <ul>
+              <li *ngFor="let a of exhibition.artworks">
+                {{ a.title }} {{ a.price }} Ft <img
+                *ngIf="a.imageUrl"
+                [src]="'http://localhost:5000' + a.imageUrl"
+                width="120"
+              />
+              </li>
+            </ul>
+          </div>
+          
+      </mat-card-content>
+
+    <mat-card-actions *ngIf="canEdit(exhibition)">
+        <button mat-button color="primary" (click)="editExhibition(exhibition._id)">Szerkesztés</button>
+        <button mat-button color="accent" (click)="assignArtworks(exhibition._id)">Művek hozzárendelése</button>
+        <button mat-button color="warn" (click)="deleteExhibition(exhibition._id)">Törlés</button>
+      </mat-card-actions>
+  </mat-card>
+</div>

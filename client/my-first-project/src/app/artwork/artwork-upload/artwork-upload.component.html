@@ -1,0 +1,20 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+  <mat-form-field appearance="fill">
+    <mat-label>Cím</mat-label>
+    <input matInput formControlName="title" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Leírás</mat-label>
+    <textarea matInput formControlName="description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Ár (Ft)</mat-label>
+    <input matInput type="number" formControlName="price" />
+  </mat-form-field>
+
+  <input type="file" (change)="onFileSelected($event)" accept="image/*" required />
+
+  <button mat-raised-button color="primary" type="submit">Feltöltés</button>
+</form>

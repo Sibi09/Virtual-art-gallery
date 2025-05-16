@@ -1,0 +1,16 @@
+.spacer {
+    flex: 1 1 auto;
+  }
+  .app-name {
+    font-weight: bold;
+    font-size: 1.3rem;
+  }
+  
+  mat-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  

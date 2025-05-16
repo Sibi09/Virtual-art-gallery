@@ -1,0 +1,24 @@
+.form-container {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .checkbox {
+    margin-top: 1rem;
+    display: block;
+  }
+  
+  .actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+  

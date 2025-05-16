@@ -1,0 +1,15 @@
+.artwork-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  padding: 16px;
+}
+
+.artwork-card {
+  width: 300px;
+}
+
+.edit {
+  margin: 10px;
+}

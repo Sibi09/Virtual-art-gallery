@@ -1,0 +1,31 @@
+<mat-toolbar color="primary" *ngIf="user">
+    <span class="app-name">🎨 Virtual Gallery</span>
+    <span class="spacer"></span>
+  
+    <!-- Artist navigáció -->
+    <ng-container *ngIf="user?.role === 'artist'">
+      <button mat-button routerLink="/my-artworks">Műveim</button>
+      <button mat-button routerLink="/upload">Feltöltés</button>
+      <button mat-button routerLink="/exhibitions/new">Kiállítás létrehozás</button>
+    </ng-container>
+  
+    <!-- Collector navigáció -->
+    <ng-container *ngIf="user?.role === 'collector'">
+      <button mat-button routerLink="/gallery">Galéria</button>
+      <button mat-button routerLink="/auctions">Aukciók</button>
+    </ng-container>
+  
+    <!-- Guest navigáció -->
+    <ng-container *ngIf="user?.role === 'guest'">
+      <button mat-button routerLink="/gallery">Galéria</button>
+      <button mat-button routerLink="/register">Regisztráció</button>
+    </ng-container>
+
+    <ng-container *ngIf="user">
+      <button mat-button routerLink="/exhibitions">📋 Kiállítások</button>
+    </ng-container>
+    
+  
+    <button mat-button (click)="logout()">Kijelentkezés</button>
+  </mat-toolbar>
+  
