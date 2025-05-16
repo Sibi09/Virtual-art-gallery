@@ -1,0 +1,31 @@
+<div *ngIf="loading" class="loading">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+  
+  <mat-card *ngIf="error" class="error-card">
+    <p>{{ error }}</p>
+  </mat-card>
+  
+  <div class="auction-grid" *ngIf="!loading && auctions.length">
+    <mat-card class="auction-card" *ngFor="let auction of auctions">
+        <img mat-card-image [src]="'http://localhost:5000' + auction.artworkId.imageUrl" alt="{{ auction.artworkId.title }}" />
+  
+      <mat-card-title>{{ auction.artworkId.title }}</mat-card-title>
+      <mat-card-content>
+        <p>Induló ár: {{ auction.startingPrice }} Ft</p>
+        <p>Jelenlegi ajánlat: <strong>{{ auction.currentBid }} Ft</strong></p>
+        <p>Lejárat: {{ auction.endTime | date:'short' }}</p>
+      </mat-card-content>
+  
+      <mat-card-actions>
+        <button mat-button color="primary" [routerLink]="['/auctions', auction._id]">
+          Részletek
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  
+  <div *ngIf="!loading && auctions.length === 0">
+    <p>Nincs jelenleg élő aukció.</p>
+  </div>
+  

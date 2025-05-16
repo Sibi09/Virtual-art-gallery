@@ -1,0 +1,34 @@
+<mat-card>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <h2>🖼️ Aukció indítása</h2>
+  
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Mű kiválasztása</mat-label>
+        <mat-select formControlName="artworkId" required>
+          <mat-option *ngFor="let art of artworks$ | async" [value]="art._id">
+            {{ art.title }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Kezdő ár (Ft)</mat-label>
+        <input matInput formControlName="startingPrice" type="number" />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Kezdési idő</mat-label>
+        <input matInput formControlName="startTime" type="datetime-local" />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Lejárati idő</mat-label>
+        <input matInput formControlName="endTime" type="datetime-local" />
+      </mat-form-field>
+  
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        Aukció létrehozása
+      </button>
+    </form>
+  </mat-card>
+  

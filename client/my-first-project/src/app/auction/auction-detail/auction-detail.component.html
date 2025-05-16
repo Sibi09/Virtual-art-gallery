@@ -1,0 +1,43 @@
+<mat-card *ngIf="auction">
+    <img [src]="getImageUrl(auction.artworkId.imageUrl)" alt="Mű kép" />
+  
+    <mat-card-title>{{ auction.artworkId.title }}</mat-card-title>
+    <mat-card-subtitle>
+      Készítette: {{ auction.artistId.username }}
+    </mat-card-subtitle>
+  
+    <mat-card-content>
+      <p>{{ auction.artworkId.description }}</p>
+      <p>Induló ár: {{ auction.startingPrice }} Ft</p>
+      <p><strong>Jelenlegi ajánlat:</strong> {{ auction.currentBid }} Ft</p>
+      <p>Lejárat: {{ auction.endTime | date: 'short' }}</p>
+    </mat-card-content>
+  
+    <mat-divider></mat-divider>
+  
+    <section *ngIf="user?.role === 'collector'" class="bid-section">
+      <mat-form-field appearance="fill">
+        <mat-label>Ajánlatod (Ft)</mat-label>
+        <input matInput type="number" [(ngModel)]="bidAmount" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="placeBid()">
+        Licitálás
+      </button>
+    </section>
+  
+    <mat-divider></mat-divider>
+  
+    <section>
+      <h4>Licit történet</h4>
+      <ul>
+        <li *ngFor="let bid of auction.bidHistory">
+          {{ bid.userId?.username || 'Ismeretlen' }} – {{ bid.amount }} Ft
+        </li>
+      </ul>
+    </section>
+  </mat-card>
+  
+  <div *ngIf="error">
+    <p>{{ error }}</p>
+  </div>
+  

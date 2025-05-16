@@ -1,0 +1,37 @@
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+  
+  .art-card {
+    display: flex;
+    flex-direction: column;
+  
+    img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      background-color: #fafafa;
+      border-bottom: 1px solid #ddd;
+      padding: 0.5rem;
+    }
+  
+    mat-card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+  
+    mat-card-subtitle {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  
+    mat-card-content {
+      font-size: 0.95rem;
+      padding-bottom: 0.5rem;
+    }
+  }
+  

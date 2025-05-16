@@ -2,14 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface Artwork {
-  _id?: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  price: number;
-  artist?: any;
-}
+import { Artwork } from '../model/Artwork';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +19,14 @@ export class ArtworkService {
   getMyArtworks(): Observable<Artwork[]> {
     return this.http.get<Artwork[]>(`${this.apiUrl}/mine`, { withCredentials: true });
   }
+
+  getOwnedArtworks(): Observable<Artwork[]> {
+    return this.http.get<Artwork[]>(`${this.apiUrl}/owned`, { withCredentials: true });
+  }
+
+  getAvailableArtworks(): Observable<Artwork[]> {
+    return this.http.get<Artwork[]>(`${this.apiUrl}/available`, { withCredentials: true });
+  }  
 
   createArtwork(artwork: Artwork): Observable<Artwork> {
     return this.http.post<Artwork>(this.apiUrl, artwork, { withCredentials: true });

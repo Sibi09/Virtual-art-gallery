@@ -1,0 +1,20 @@
+<div *ngIf="loading" class="loading">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+  
+  <div class="gallery-grid" *ngIf="!loading && artworks.length">
+    <mat-card class="art-card" *ngFor="let artwork of artworks">
+      <img mat-card-image [src]="getImageUrl(artwork.imageUrl)" alt="{{ artwork.title }}" />
+      <mat-card-title>{{ artwork.title }}</mat-card-title>
+      <mat-card-subtitle>Művész: {{ artwork.artist?.username }}</mat-card-subtitle>
+      <mat-card-content>
+        <p>{{ artwork.description }}</p>
+        <p><strong>Ár:</strong> {{ artwork.price }} Ft</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
+  <div *ngIf="!loading && artworks.length === 0">
+    <p>Jelenleg nincs elérhető műalkotás.</p>
+  </div>
+  

@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ArtworkService, Artwork } from '../../shared/services/artwork.service';
+
+import { Artwork } from '../../shared/model/Artwork';
+
+import { ArtworkService } from '../../shared/services/artwork.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';

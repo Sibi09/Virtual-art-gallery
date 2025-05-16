@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { Artwork } from '../shared/model/Artwork';
+
 import { CommonModule } from '@angular/common';
-import { ArtworkService, Artwork } from '../shared/services/artwork.service';
+import { ArtworkService } from '../shared/services/artwork.service';
 import { ExhibitionService } from '../shared/services/exhibition.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';

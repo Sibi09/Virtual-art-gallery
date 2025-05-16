@@ -22,6 +22,10 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  ngOnInit(): void {
+    this.getCurrentUser().subscribe();
+  }
+
   private isAuthenticated = false;
 
   login(data: LoginDTO): Observable<User> {
@@ -43,7 +47,9 @@ export class AuthService {
 
   getCurrentUser(force = false): Observable<User> {
     if (!force && !this.isAuthenticated) {
-      return of(null as any);
+      const guestUser: User = { _id: '', username: 'Vendég', email: '', role: 'guest' };
+      this.currentUserSubject.next(guestUser);
+      return of(guestUser);
     }
   
     return this.http.get<User>(`${this.apiUrl}/users/me`, { withCredentials: true }).pipe(
@@ -52,12 +58,14 @@ export class AuthService {
         this.isAuthenticated = true;
       }),
       catchError(() => {
-        this.currentUserSubject.next(null);
+        const guestUser: User = { _id: '', username: 'Vendég', email: '', role: 'guest' };
+        this.currentUserSubject.next(guestUser);
         this.isAuthenticated = false;
-        return of(null as any);
+        return of(guestUser);
       })
     );
   }
+  
 
   isLoggedIn(): boolean {
     return !!this.currentUserSubject.value;

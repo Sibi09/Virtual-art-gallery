@@ -10,6 +10,7 @@ import { User } from '../model/User';
 import Artwork from '../model/Artwork';
 import Exhibition from '../model/Exhibition';
 import Transaction from '../model/Transaction';
+import Auction from '../model/Auction';
 import { checkAuth, checkRole } from '../middleware/auth';
 
 import { RequestWithFile } from '../routes/RequestWithFile';
@@ -36,12 +37,31 @@ export function configureRoutes(passport: any, router: Router): Router {
     res.json(artworks);
   });
 
-  router.get('/artworks/mine', checkAuth, checkRole('artist'), async (req: Request, res: Response) => {
+  router.get('/artworks/mine', checkAuth, checkRole('artist'), async (req, res) => {
     const userId = (req as any).user.id;
     const artworks = await Artwork.find({ artist: userId }).populate('artist', 'username');
+  
     res.json(artworks);
   });
 
+  router.get('/artworks/available', async (_req, res) => {
+    try {
+      const soldArtworkIds = await Auction.find({
+        status: 'ended',
+        currentBidderId: { $ne: null }
+      }).distinct('artworkId');
+  
+      const artworks = await Artwork.find({
+        _id: { $nin: soldArtworkIds }
+      }).populate('artist', 'username');
+  
+      res.json(artworks);
+    } catch (err) {
+      console.error('GET /artworks/available error:', err);
+      res.status(500).json({ message: 'Nem sikerült a galéria betöltése.' });
+    }
+  });
+  
   router.post('/artworks', checkAuth, checkRole('artist'), upload.single('image'), async (req: RequestWithFile, res: Response) => {
     if (!req.file) return res.status(400).json({ message: 'Kép kötelező.' });
   
@@ -184,6 +204,121 @@ export function configureRoutes(passport: any, router: Router): Router {
     });
     await tx.save();
     res.status(201).json(tx);
+  });
+
+  router.post('/auctions', checkAuth, checkRole('artist'), async (req: Request, res: Response) => {
+    try {
+      const existing = await Auction.findOne({
+        artworkId: req.body.artworkId,
+        status: { $in: ['upcoming', 'live'] }
+      });
+      
+      if (existing) {
+        return res.status(400).json({
+          message: 'Ehhez a műalkotáshoz már van aktív vagy közelgő aukció.'
+        });
+      }
+
+      const auction = new Auction({
+        ...req.body,
+        artistId: (req as any).user.id,
+        currentBid: req.body.startingPrice
+      });
+      await auction.save();
+      res.status(201).json(auction);
+    } catch (err) {
+      console.error('POST /auctions error:', err);
+      res.status(400).json({ message: 'Aukció létrehozása sikertelen', details: err });
+    }
+  });
+
+  router.get('/auctions/active', async (_req: Request, res: Response) => {
+    try {
+      const now = new Date();
+  
+      await Auction.updateMany(
+        {
+          status: 'upcoming',
+          startTime: { $lte: now }
+        },
+        { $set: { status: 'live' } }
+      );
+  
+      const expiredAuctions = await Auction.find({
+        status: 'live',
+        endTime: { $lte: now }
+      });
+  
+      for (const auction of expiredAuctions) {
+        auction.status = 'ended';
+        await auction.save();
+  
+        if (auction.currentBidderId) {
+          await Artwork.findByIdAndUpdate(auction.artworkId, {
+            $set: { artist: auction.currentBidderId }
+          });
+        }
+      }
+  
+      const auctions = await Auction.find({
+        status: 'live',
+        startTime: { $lte: now },
+        endTime: { $gte: now }
+      })
+        .populate('artworkId')
+        .populate('currentBidderId');
+  
+      res.json(auctions);
+    } catch (err) {
+      console.error('GET /auctions/active error:', err);
+      res.status(500).json({ message: 'Aukciók lekérdezése sikertelen', details: err });
+    }
+  });
+  
+
+  router.get('/auctions/:id', async (req: Request, res: Response) => {
+    try {
+      const auction = await Auction.findById(req.params.id)
+        .populate('artworkId')
+        .populate('bidHistory.userId');
+
+      if (!auction) {
+        return res.status(404).json({ message: 'Aukció nem található' });
+      }
+
+      res.json(auction);
+    } catch (err) {
+      console.error('GET /auctions/:id error:', err);
+      res.status(500).json({ message: 'Hiba aukció lekérdezésénél', details: err });
+    }
+  });
+
+  router.post('/auctions/:id/bid', checkAuth, checkRole('collector'), async (req: Request, res: Response) => {
+    try {
+      const { amount } = req.body;
+      const auction = await Auction.findById(req.params.id);
+
+      if (!auction) return res.status(404).json({ message: 'Aukció nem található' });
+      if (amount <= auction.currentBid) {
+        return res.status(400).json({ message: 'Licit túl alacsony' });
+      }
+
+      auction.currentBid = amount;
+      auction.currentBidderId = (req as any).user.id;
+      auction.bidHistory.push({ userId: (req as any).user.id, amount });
+
+      await auction.save();
+      res.status(200).json({ success: true, newBid: amount });
+    } catch (err) {
+      console.error('POST /auctions/:id/bid error:', err);
+      res.status(500).json({ message: 'Licitálás sikertelen', details: err });
+    }
+  });
+
+  router.get('/artworks/owned', checkAuth, checkRole('collector'), async (req, res) => {
+    const userId = (req as any).user.id;
+    const artworks = await Artwork.find({ artist: userId }).populate('artist', 'username');
+    res.json(artworks);
   });
 
   router.post('/users/register', async (req: Request, res: Response) => {

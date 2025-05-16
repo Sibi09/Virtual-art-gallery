@@ -1,31 +1,42 @@
 <mat-toolbar color="primary" *ngIf="user">
-    <span class="app-name">🎨 Virtual Gallery</span>
-    <span class="spacer"></span>
-  
-    <!-- Artist navigáció -->
-    <ng-container *ngIf="user?.role === 'artist'">
-      <button mat-button routerLink="/my-artworks">Műveim</button>
-      <button mat-button routerLink="/upload">Feltöltés</button>
-      <button mat-button routerLink="/exhibitions/new">Kiállítás létrehozás</button>
-    </ng-container>
-  
-    <!-- Collector navigáció -->
-    <ng-container *ngIf="user?.role === 'collector'">
-      <button mat-button routerLink="/gallery">Galéria</button>
-      <button mat-button routerLink="/auctions">Aukciók</button>
-    </ng-container>
-  
-    <!-- Guest navigáció -->
-    <ng-container *ngIf="user?.role === 'guest'">
-      <button mat-button routerLink="/gallery">Galéria</button>
-      <button mat-button routerLink="/register">Regisztráció</button>
-    </ng-container>
+  <span class="app-name">🎨 Virtual Gallery</span>
+  <span class="spacer"></span>
 
-    <ng-container *ngIf="user">
-      <button mat-button routerLink="/exhibitions">📋 Kiállítások</button>
-    </ng-container>
-    
-  
-    <button mat-button (click)="logout()">Kijelentkezés</button>
-  </mat-toolbar>
-  
+  <!-- 🎭 MŰVEK (csak artist) -->
+  <ng-container *ngIf="user?.role === 'artist'">
+    <button mat-button [matMenuTriggerFor]="artworkMenu">🎭 Művek</button>
+    <mat-menu #artworkMenu="matMenu">
+      <button mat-menu-item routerLink="/my-artworks">Saját művek</button>
+      <button mat-menu-item routerLink="/upload">Új mű feltöltése</button>
+    </mat-menu>
+
+    <!-- 📋 KIÁLLÍTÁSOK -->
+    <button mat-button [matMenuTriggerFor]="exhibitionMenu">📋 Kiállítások</button>
+    <mat-menu #exhibitionMenu="matMenu">
+      <button mat-menu-item routerLink="/exhibitions">Összes</button>
+      <button mat-menu-item routerLink="/exhibitions/new">Létrehozás</button>
+      <button mat-menu-item routerLink="/my-exhibitions">Saját kiállításaim</button>
+    </mat-menu>
+
+    <!-- 🛎 AUKCIÓK -->
+    <button mat-button [matMenuTriggerFor]="auctionMenu">🛎 Aukciók</button>
+    <mat-menu #auctionMenu="matMenu">
+      <button mat-menu-item routerLink="/auctions">Összes aukció</button>
+      <button mat-menu-item routerLink="/auctions/new">Új aukció indítása</button>
+    </mat-menu>
+  </ng-container>
+
+  <!-- 🎨 Galéria és Aukció (collector vagy guest) -->
+  <ng-container *ngIf="user?.role === 'collector' || user?.role === 'guest'">
+    <button mat-button routerLink="/gallery">🖼 Galéria</button>
+    <button mat-button routerLink="/my-collection">🗃️ Gyűjteményem</button>
+    <button mat-button routerLink="/auctions">🛎 Aukciók</button>
+  </ng-container>
+
+  <ng-container *ngIf="user?.role === 'guest'">
+    <button mat-button routerLink="/login">🔐 Bejelentkezés</button>
+    <button mat-button routerLink="/signup">📝 Regisztráció</button>
+  </ng-container>
+
+  <button mat-button *ngIf="user?.role === 'artist' || user?.role === 'collector'" (click)="logout()">Kijelentkezés</button>
+</mat-toolbar>

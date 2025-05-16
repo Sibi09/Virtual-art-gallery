@@ -1,0 +1,19 @@
+<div *ngIf="loading" class="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  
+  <div class="gallery-grid" *ngIf="!loading && artworks.length">
+    <mat-card *ngFor="let artwork of artworks" class="art-card">
+      <img mat-card-image [src]="getImageUrl(artwork.imageUrl)" alt="{{ artwork.title }}" />
+      <mat-card-title>{{ artwork.title }}</mat-card-title>
+      <mat-card-content>
+        <p>{{ artwork.description }}</p>
+        <p><strong>Ár:</strong> {{ artwork.price }} Ft</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
+  <div *ngIf="!loading && artworks.length === 0">
+    <p>Nincs megnyert műalkotásod.</p>
+  </div>
+  

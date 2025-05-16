@@ -58,6 +58,35 @@ export const routes: Routes = [
       import('./exhibition/exhibition-edit/exhibition-edit.component').then(m => m.ExhibitionEditComponent)
   },
   {
+    path: 'auctions',
+    loadComponent: () =>
+      import('./auction/auction-list/auction-list.component').then(m => m.AuctionListComponent)
+  },
+  {
+    path: 'auctions/new',
+    loadComponent: () =>
+      import('./auction/auction-create/auction-create.component').then(m => m.AuctionCreateComponent),
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'artist' }
+  },
+  {
+    path: 'auctions/:id',
+    loadComponent: () =>
+      import('./auction/auction-detail/auction-detail.component').then(m => m.AuctionDetailComponent)
+  },
+  {
+    path: 'my-collection',
+    loadComponent: () =>
+      import('./collector/collector-gallery.component').then(m => m.CollectorGalleryComponent),
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'collector' }
+  },
+  {
+    path: 'gallery',
+    loadComponent: () =>
+      import('./gallery/gallery-view.component').then(m => m.GalleryViewComponent)
+  },
+  {
     path: 'upload',
     loadComponent: () =>
       import('./artwork/artwork-upload/artwork-upload.component').then(m => m.ArtworkUploadComponent),

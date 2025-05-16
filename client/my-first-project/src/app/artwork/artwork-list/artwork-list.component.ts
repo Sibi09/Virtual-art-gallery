@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ArtworkService, Artwork } from '../../shared/services/artwork.service';
+import { ArtworkService } from '../../shared/services/artwork.service';
+
+import { Artwork } from '../../shared/model/Artwork';
+
 import { AuthService, User } from '../../shared/services/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,13 +38,13 @@ export class ArtworkListComponent implements OnInit {
   }
 
   loadArtworks(): void {
-    this.artworkService.getArtworks().subscribe(data => {
+    this.artworkService.getMyArtworks().subscribe(data => {
       this.artworks = data;
     });
   }
 
   canDelete(artwork: Artwork): boolean {
-    return this.currentUser?.role === 'artist' && this.currentUser._id === artwork.artist._id;
+    return this.currentUser?.role === 'artist' && this.currentUser._id === artwork.artist?._id;
   }
 
   editArtwork(artworkId?: string): void {

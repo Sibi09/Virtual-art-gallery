@@ -2,7 +2,7 @@
   <mat-card *ngFor="let artwork of artworks" class="artwork-card">
     <mat-card-header>
       <mat-card-title>{{ artwork.title }}</mat-card-title>
-      <mat-card-subtitle>Művész: {{ artwork.artist.username }}</mat-card-subtitle>
+      <mat-card-subtitle>Művész: {{ artwork.artist?.username }}</mat-card-subtitle>
     </mat-card-header>
 
     <img mat-card-image [src]="'http://localhost:5000' + artwork.imageUrl" alt="{{ artwork.title }}" />

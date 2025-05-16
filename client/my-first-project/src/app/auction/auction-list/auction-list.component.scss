@@ -1,0 +1,25 @@
+.auction-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  
+  .auction-card {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .error-card {
+    background-color: #ffebee;
+    color: #b71c1c;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  
+  .loading {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  
