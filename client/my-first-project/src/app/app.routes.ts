@@ -93,6 +93,18 @@ export const routes: Routes = [
     data: { role: 'collector' }
   },
   {
+    path: 'events',
+    loadComponent: () =>
+      import('./features/events/event-list/event-list.component').then(m => m.EventListComponent)
+  },
+  {
+    path: 'events/create',
+    loadComponent: () =>
+      import('./features/events/event-create/event-create.component').then(m => m.EventCreateComponent),
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'artist' }
+  },
+  {
     path: 'gallery',
     loadComponent: () =>
       import('./gallery/gallery-view.component').then(m => m.GalleryViewComponent)

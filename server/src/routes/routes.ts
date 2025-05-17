@@ -11,6 +11,7 @@ import Artwork from '../model/Artwork';
 import Exhibition from '../model/Exhibition';
 import Transaction from '../model/Transaction';
 import Auction from '../model/Auction';
+import Event from '../model/Event';
 import { checkAuth, checkRole } from '../middleware/auth';
 
 import { RequestWithFile } from '../routes/RequestWithFile';
@@ -310,7 +311,6 @@ export function configureRoutes(passport: any, router: Router): Router {
       res.status(500).json({ message: 'Aukciók lekérdezése sikertelen', details: err });
     }
   });
-  
 
   router.get('/auctions/:id', async (req: Request, res: Response) => {
     try {
@@ -355,6 +355,45 @@ export function configureRoutes(passport: any, router: Router): Router {
     const userId = (req as any).user.id;
     const artworks = await Artwork.find({ artist: userId }).populate('artist', 'username');
     res.json(artworks);
+  });
+
+  router.get('/events', async (_req, res) => {
+    try {
+      const events = await Event.find({})
+        .sort({ date: -1 })
+        .populate('artist', 'username profileImage');
+  
+      res.json(events);
+    } catch (err) {
+      console.error('GET /events error:', err);
+      res.status(500).json({ message: 'Nem sikerült lekérni az eseményeket.' });
+    }
+  });
+  
+
+  router.post('/events', checkAuth, checkRole('artist'), async (req, res) => {
+    try {
+      const userId = (req as any).user?.id;
+  
+      if (!userId) {
+        return res.status(401).json({ message: 'Nincs bejelentkezve.' });
+      }
+  
+      const event = new Event({
+        title: req.body.title,
+        description: req.body.description,
+        date: req.body.date,
+        type: req.body.type || 'live',
+        link: req.body.link,
+        artist: userId
+      });
+  
+      await event.save();
+      res.status(201).json(event);
+    } catch (err) {
+      console.error('POST /events error:', err);
+      res.status(400).json({ message: 'Esemény létrehozása sikertelen.', details: err });
+    }
   });
 
   router.post('/users/register', async (req: Request, res: Response) => {

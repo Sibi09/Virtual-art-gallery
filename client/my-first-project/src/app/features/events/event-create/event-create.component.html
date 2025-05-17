@@ -1,0 +1,35 @@
+<mat-card>
+    <h2>Esemény létrehozása</h2>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <mat-form-field appearance="fill">
+        <mat-label>Cím</mat-label>
+        <input matInput formControlName="title" required>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Leírás</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Dátum</mat-label>
+        <input matInput type="datetime-local" formControlName="date" required>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Típus</mat-label>
+        <mat-select formControlName="type">
+          <mat-option value="live">Élő esemény</mat-option>
+          <mat-option value="qna">Kérdezz-felelek</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Link (opcionális)</mat-label>
+        <input matInput formControlName="link">
+      </mat-form-field>
+  
+      <button mat-raised-button color="primary" type="submit">Mentés</button>
+    </form>
+  </mat-card>
+  
