@@ -4,7 +4,7 @@
       <mat-card-content>
         <form (ngSubmit)="onSignup()" #form="ngForm">
           <mat-form-field appearance="fill">
-            <mat-label>Username</mat-label>
+            <mat-label>Felhasználónév</mat-label>
             <input matInput name="username" [(ngModel)]="username" required>
           </mat-form-field>
   
@@ -14,26 +14,26 @@
           </mat-form-field>
   
           <mat-form-field appearance="fill">
-            <mat-label>Password</mat-label>
+            <mat-label>Jelszó</mat-label>
             <input matInput type="password" name="password" [(ngModel)]="password" required>
           </mat-form-field>
   
           <mat-form-field appearance="fill">
-            <mat-label>Role</mat-label>
+            <mat-label>Szerepkör</mat-label>
             <mat-select name="role" [(ngModel)]="role" required>
-              <mat-option value="collector">Collector</mat-option>
-              <mat-option value="artist">Artist</mat-option>
+              <mat-option value="collector">Gyűjtő</mat-option>
+              <mat-option value="artist">Művész</mat-option>
             </mat-select>
           </mat-form-field>
   
           <div *ngIf="error" class="error">{{ error }}</div>
   
           <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
-            Register
+            Regisztráció
           </button>
-          <p>Already have an account?</p>
+          <p>Már van profilod?</p>
           <button class="register" mat-raised-button color="primary" (click)="goToLogin()">
-            Login
+            Bejelentkezés
           </button>
         </form>
       </mat-card-content>

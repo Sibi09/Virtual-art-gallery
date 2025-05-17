@@ -20,6 +20,17 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'artist/:id',
+    loadComponent: () =>
+      import('./artist/artist-profile.component').then(m => m.ArtistProfileComponent)
+  },
+  {
+    path: 'profile',
+    loadComponent: () =>
+      import('./profile/profile.component').then(m => m.ProfileComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'my-artworks',
     loadComponent: () =>
       import('./artwork/artwork-list/artwork-list.component').then(m => m.ArtworkListComponent),

@@ -41,8 +41,18 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true })
-      .pipe(tap(() => this.currentUserSubject.next(null)));
+    return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).pipe(
+      tap(() => {
+        const guestUser: User = {
+          _id: '',
+          username: 'Vendég',
+          email: '',
+          role: 'guest'
+        };
+        this.currentUserSubject.next(guestUser);
+        this.isAuthenticated = false;
+      })
+    );
   }
 
   getCurrentUser(force = false): Observable<User> {

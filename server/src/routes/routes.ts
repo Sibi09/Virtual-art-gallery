@@ -32,6 +32,42 @@ export function configureRoutes(passport: any, router: Router): Router {
     res.json(user);
   });
 
+  router.put('/users/me', checkAuth, upload.single('image'), async (req: RequestWithFile, res: Response) => {
+    try {
+      const fields = (({ username, email, bio, location }) =>
+        ({ username, email, bio, location }))(req.body) as any;
+  
+      if (req.file) {
+        fields['profileImage'] = `/uploads/${req.file.filename}`;
+      }
+  
+      const updated = await User.findByIdAndUpdate((req as any).user.id, fields, { new: true });
+      res.status(200).json(updated);
+    } catch (err) {
+      console.error('PUT /users/me error:', err);
+      res.status(500).json({ message: 'Nem sikerült frissíteni a profilt.' });
+    }
+  });
+  
+  
+
+  router.get('/users/:id/public-profile', async (req: Request, res: Response) => {
+    try {
+      const user = await User.findById(req.params.id).select('username bio profileImage location role');
+      if (!user || user.role !== 'artist') {
+        return res.status(404).json({ message: 'Művész nem található' });
+      }
+  
+      const artworks = await Artwork.find({ artist: user._id }).select('title imageUrl price');
+      const exhibitions = await Exhibition.find({ artist: user._id }).select('title startDate');
+  
+      res.json({ user, artworks, exhibitions });
+    } catch (err) {
+      console.error('GET /users/:id/public-profile error:', err);
+      res.status(500).json({ message: 'Hiba a művész profil lekérdezésénél' });
+    }
+  });
+
   router.get('/artworks', async (_, res: Response) => {
     const artworks = await Artwork.find().populate('artist', 'username');
     res.json(artworks);

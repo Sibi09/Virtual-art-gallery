@@ -1,0 +1,38 @@
+<mat-card>
+    <h2>Profil szerkesztése</h2>
+  
+    <!-- Profilkép előnézet -->
+    <div *ngIf="form.value.profileImage" class="profile-image-preview">
+      <img [src]="'http://localhost:5000' + form.value.profileImage" alt="Profilkép">
+    </div>
+  
+    <form [formGroup]="form" (ngSubmit)="save()" enctype="multipart/form-data">
+      <mat-form-field appearance="fill">
+        <mat-label>Felhasználónév</mat-label>
+        <input matInput formControlName="username">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Helyszín</mat-label>
+        <input matInput formControlName="location">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Bemutatkozás</mat-label>
+        <textarea matInput rows="3" formControlName="bio"></textarea>
+      </mat-form-field>
+  
+      <div class="file-upload">
+        <label for="image-upload">Profilkép feltöltése:</label>
+        <input type="file" id="image-upload" (change)="onFileSelected($event)">
+      </div>
+  
+      <button mat-raised-button color="primary" type="submit">Mentés</button>
+    </form>
+  </mat-card>
+  

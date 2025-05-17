@@ -6,6 +6,9 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: 'artist' | 'collector';
+  bio?: string;
+  profileImage?: string;
+  location?: string;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -13,7 +16,11 @@ const UserSchema = new Schema<IUser>({
   username: { type: String, required: true },
   email:    { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role:     { type: String, enum: ['artist', 'collector'], required: true }
+  role:     { type: String, enum: ['artist', 'collector'], required: true },
+
+  bio:         { type: String, default: '' },
+  profileImage:{ type: String, default: '' },
+  location:    { type: String, default: '' }
 });
 
 UserSchema.pre<IUser>('save', async function (next) {

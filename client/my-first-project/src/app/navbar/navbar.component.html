@@ -2,6 +2,10 @@
   <span class="app-name">🎨 Virtual Gallery</span>
   <span class="spacer"></span>
 
+  <ng-container *ngIf="user && user.role !== 'guest'">
+    <button mat-button [routerLink]="['/profile']">👤 Profil</button>
+  </ng-container>
+
   <!-- 🎭 MŰVEK (csak artist) -->
   <ng-container *ngIf="user?.role === 'artist'">
     <button mat-button [matMenuTriggerFor]="artworkMenu">🎭 Művek</button>

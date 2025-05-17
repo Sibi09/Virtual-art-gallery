@@ -1,0 +1,29 @@
+<div *ngIf="loading" class="loading">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+  
+  <mat-card *ngIf="artist" class="profile-card">
+    <img *ngIf="artist.profileImage" [src]="artist.profileImage" class="avatar" alt="profilkép" />
+    <mat-card-title>{{ artist.username }}</mat-card-title>
+    <mat-card-subtitle>{{ artist.location }}</mat-card-subtitle>
+    <mat-card-content>
+      <p>{{ artist.bio }}</p>
+    </mat-card-content>
+  </mat-card>
+  
+  <h2>Műalkotások</h2>
+  <div class="grid">
+    <mat-card *ngFor="let artwork of artworks">
+      <img mat-card-image [src]="getImageUrl(artwork.imageUrl)" />
+      <mat-card-title>{{ artwork.title }}</mat-card-title>
+      <mat-card-content>
+        <p>{{ artwork.price }} Ft</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
+  <h2>Kiállítások</h2>
+  <ul>
+    <li *ngFor="let e of exhibitions">{{ e.title }} – {{ e.startDate | date }}</li>
+  </ul>
+  

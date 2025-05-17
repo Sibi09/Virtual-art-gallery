@@ -12,12 +12,12 @@
         #emailModel="ngModel"
       />
       <mat-error *ngIf="emailModel.invalid && emailModel.touched">
-        Please enter a valid email address.
+        Kérlek valós email-t adj meg!
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Password</mat-label>
+      <mat-label>Jelszó</mat-label>
       <input
         matInput
         type="password"
@@ -27,7 +27,7 @@
         #passwordModel="ngModel"
       />
       <mat-error *ngIf="passwordModel.invalid && passwordModel.touched">
-        Password is required.
+        Jelszó kitöltése kötelező!
       </mat-error>
     </mat-form-field>
 
@@ -36,10 +36,10 @@
     </div>
 
     <button mat-raised-button color="primary" type="submit">
-      Login
+      Bejelentkezés
     </button>
     <button class="register" mat-raised-button color="primary" (click)="goToRegister()">
-      Sign up
+      Regisztráció
     </button>
   </form>
 </mat-card>
