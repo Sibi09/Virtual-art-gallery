@@ -89,7 +89,8 @@ export function configureRoutes(passport: any, router: Router): Router {
       }).distinct('artworkId');
   
       const artworks = await Artwork.find({
-        _id: { $nin: soldArtworkIds }
+        _id: { $nin: soldArtworkIds },
+        availableForImmediatePurchase: true
       }).populate('artist', 'username');
   
       res.json(artworks);
@@ -107,17 +108,76 @@ export function configureRoutes(passport: any, router: Router): Router {
       description: req.body.description,
       price: req.body.price,
       imageUrl: `/uploads/${req.file.filename}`,
-      artist: (req as any).user.id
+      artist: (req as any).user.id,
+      availableForImmediatePurchase: req.body.availableForImmediatePurchase === 'true'
     });
   
     await newArtwork.save();
     res.status(201).json(newArtwork);
   });
 
-  router.put('/artworks/:id', checkAuth, checkRole('artist'), async (req: Request, res: Response) => {
-    const updated = await Artwork.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updated);
+  router.post('/artworks/:id/purchase', checkAuth, checkRole('collector'), async (req: Request, res: Response) => {
+    try {
+      const artwork = await Artwork.findById(req.params.id);
+  
+      if (!artwork) {
+        return res.status(404).json({ message: 'Műalkotás nem található.' });
+      }
+  
+      if (!artwork.availableForImmediatePurchase) {
+        return res.status(400).json({ message: 'Ez a műalkotás nem elérhető közvetlen vásárlásra.' });
+      }
+  
+      const transaction = new Transaction({
+        artwork: artwork._id,
+        price: artwork.price,
+        collector: (req as any).user.id,
+        type: 'direct',
+        date: new Date()
+      });
+  
+      await transaction.save();
+  
+      artwork.availableForImmediatePurchase = false;
+      artwork.artist = (req as any).user.id;
+      await artwork.save();
+  
+      res.status(200).json({ message: 'Sikeres vásárlás.', transaction });
+    } catch (err) {
+      console.error('POST /artworks/:id/purchase error:', err);
+      res.status(500).json({ message: 'Hiba történt a vásárlás során.' });
+    }
   });
+  
+  router.put('/artworks/:id', checkAuth, checkRole('artist'), async (req: Request, res: Response) => {
+    try {
+      const updates: Partial<{
+        title: string;
+        description: string;
+        price: number;
+        availableForImmediatePurchase: boolean;
+      }> = req.body;
+  
+      const updated = await Artwork.findByIdAndUpdate(
+        req.params.id,
+        {
+          ...updates,
+          availableForImmediatePurchase: updates.availableForImmediatePurchase === true
+        },
+        { new: true }
+      );
+  
+      if (!updated) {
+        return res.status(404).json({ message: 'Műalkotás nem található.' });
+      }
+  
+      res.status(200).json(updated);
+    } catch (err) {
+      console.error('PUT /artworks/:id error:', err);
+      res.status(500).json({ message: 'Frissítés sikertelen.' });
+    }
+  });
+  
 
   router.delete('/artworks/:id', checkAuth, checkRole('artist'), async (req: Request, res: Response) => {
     try {

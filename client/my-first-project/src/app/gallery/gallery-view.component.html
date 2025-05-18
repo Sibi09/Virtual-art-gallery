@@ -11,6 +11,12 @@
         <p>{{ artwork.description }}</p>
         <p><strong>Ár:</strong> {{ artwork.price }} Ft</p>
       </mat-card-content>
+      <mat-card-actions
+        *ngIf="artwork.availableForImmediatePurchase && auth.getCurrentUserSnapshot()?.role === 'collector'">
+        <button mat-raised-button color="primary" (click)="buyNow(artwork._id)">
+          Vásárlás most
+        </button>
+      </mat-card-actions>
     </mat-card>
   </div>
   

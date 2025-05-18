@@ -22,6 +22,12 @@
             <mat-label>Ár</mat-label>
             <input matInput type="number" [(ngModel)]="artwork.price" name="price" required>
           </mat-form-field>
+
+          <mat-checkbox
+            [checked]="artwork.availableForImmediatePurchase"
+            (change)="artwork.availableForImmediatePurchase = $event.checked">
+            Elérhető azonnali vásárlásra
+          </mat-checkbox>
   
           <div *ngIf="error" class="error">{{ error }}</div>
   

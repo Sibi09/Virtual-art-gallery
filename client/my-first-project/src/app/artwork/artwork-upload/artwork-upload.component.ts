@@ -5,6 +5,8 @@ import { ArtworkService } from '../../shared/services/artwork.service';
 import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckbox  } from '@angular/material/checkbox';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-artwork-upload',
@@ -13,7 +15,8 @@ import { MatButtonModule } from '@angular/material/button';
     CommonModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCheckbox
   ],
   templateUrl: './artwork-upload.component.html',
   styleUrls: ['./artwork-upload.component.scss']
@@ -21,6 +24,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class ArtworkUploadComponent {
   form: FormGroup;
   selectedFile: File | null = null;
+  @ViewChild('checkbox') checkbox!: MatCheckbox;
 
   constructor(private fb: FormBuilder, private artworkService: ArtworkService, private router: Router) {
     this.form = this.fb.group({
@@ -48,6 +52,7 @@ export class ArtworkUploadComponent {
     formData.append('description', this.form.value.description);
     formData.append('price', this.form.value.price);
     formData.append('image', this.selectedFile);
+    formData.append('availableForImmediatePurchase', this.checkbox?.checked ? 'true' : 'false');
 
     this.artworkService.uploadArtwork(formData).subscribe({
       next: () => this.router.navigate(['/artworks']),

@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-artwork-edit',
@@ -20,18 +21,21 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCheckbox
   ],
   templateUrl: './artwork-edit.component.html',
   styleUrls: ['./artwork-edit.component.scss']
 })
+
 export class ArtworkEditComponent implements OnInit {
   artworkId = '';
   artwork: Artwork = {
     title: '',
     description: '',
     imageUrl: '',
-    price: 0
+    price: 0,
+    availableForImmediatePurchase: false
   };
   error = '';
 
